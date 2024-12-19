@@ -9,13 +9,69 @@ const Button = (props) => {
   )
 }
 
-const Display = (props) => {
+const Statistics = (props) => {
+
+  if(props.all != 0){
+    return(
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <StatisticLine text="good" value={props.good} table={true} />
+            </tr>
+            <tr>
+              <StatisticLine text="neutral" value={props.neutral} table={true} />
+            </tr>
+            <tr>
+              <StatisticLine text="bad" value={props.bad} table={true} />
+            </tr>
+            <tr>
+              <StatisticLine text="all" value={props.all} table={true} />
+            </tr>
+            <tr>
+              <StatisticLine text="average" value={props.average} table={true} />
+            </tr>
+            <tr>
+              <StatisticLine text="positive" value={props.positive} table={true} />
+            </tr>              
+          </tbody>
+        </table>
+       
+      </div>
+    )
+  }else{
+    return(
+      <div>
+        No feedback given
+      </div>
+    )
+  }
+}
+
+const StatisticLine = ({text, value, ...rest}) => {
+
+  if(rest.table == true){
+    return(     
+      <>
+        <td>
+          {text}
+        </td>
+        <td>
+          {value}
+        </td>
+      </>
+    )
+  }
+
   return(
     <div>
-      {props.text}: {props.total}
+
+      {text} {value}
     </div>
   )
 }
+
+
 
 const App = () => {
   // guarda los clics de cada botón en su propio estado
@@ -23,41 +79,14 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
   const [all, setAll] = useState(good + neutral + bad)
-  const [average, setAverage] = useState('Waiting for data')
-  const [positive, setPositive] = useState('Doing some high-tech math stuff...')
-
-
-  /*
-  const operation = (type) => {
-
-    
-    console.log(type)
-
-    if (type === undefined) return null;
-
-    if (type === "sum") {
-      
-      setGood((prev) => prev + 1);
-
-    }
-    if (type === "rest") {
-      setBad((prev) => prev - 1);
-    }
-    if (type === "mult") {
-      setNumero((prev) => prev * 2);
-    }
-
-
-  };
-  */
-
+  const [average, setAverage] = useState(0)
+  const [positive, setPositive] = useState(0)
 
   const operate = (operate) => {
     let goodUpdated = good
     let badUpdated = bad
     let neutralUpdated = neutral
     let allUpdated = all
-
     
     switch (operate) {
       case 'good':
@@ -102,24 +131,16 @@ const App = () => {
 
   return (
     <div>
+      
+      
       <h1>give feedback</h1>
       <Button onClick={() => operate('good')} text="good" />
       <Button onClick={() => operate('neutral')} text="neutral" />
       <Button onClick={() => operate('bad')} text="bad" />
 
-      <Button onClick={() => operation('sum')} text="Frank:Sum" />
 
-
-    
       <h1>Statistics</h1>
-      <Display text="good" total={good} />
-      <Display text="neutral" total={neutral} />
-      <Display text="bad" total={bad} />
-      <Display text="all" total={all} />
-      <Display text="average" total={average} />
-      <Display text="Positive comments (in %)" total={positive} />
-    
-    
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} total={good} positive={positive} />
     </div>
   )
 }
