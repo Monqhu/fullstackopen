@@ -67,7 +67,6 @@ const App = () => {
         allUpdated = allUpdated + 1
         setAll(goodUpdated + neutral +bad)
         calculateAverage(goodUpdated, neutralUpdated, badUpdated, allUpdated)
-
         calculatePositive(allUpdated, goodUpdated)
       break;
     
@@ -78,7 +77,6 @@ const App = () => {
         setAll(good + neutralUpdated + bad)   
         calculateAverage(goodUpdated, neutralUpdated, badUpdated, allUpdated)
         calculatePositive(allUpdated, goodUpdated)
-
       break;
 
       case 'bad':
@@ -87,9 +85,7 @@ const App = () => {
         allUpdated = allUpdated + 1
         setAll(good + neutral + badUpdated)
         calculateAverage(goodUpdated, neutralUpdated, badUpdated, allUpdated)
-      
         calculatePositive(allUpdated, goodUpdated)
-
       break;
     }
   }
