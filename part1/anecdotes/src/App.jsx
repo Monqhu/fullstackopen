@@ -4,21 +4,43 @@ import { useState } from 'react'
 const Button = (props) => {
 
   return(
-    <div>
+    <>
       <button onClick={props.onClick}>{props.text}</button>
-    </div>
+    </>
   )
 }
 
 const Information = (props) => {
-  const {selected, points} = props
+  const {type, selected, points} = props
+
+  console.log(props)
 
 
-  return(
-    <div>
-      this anecdote has {points[selected]} votes
-    </div>
-  )
+  switch (type) {
+    case "votes":
+    return(
+      <div>
+        this anecdote has {points[selected]} votes
+      </div>
+    )
+      
+    case "most":
+    return(
+      <div>
+        <h2>Anecdote with most votes</h2>
+        <p>{props.text}</p>
+      </div>
+      
+    )
+  
+    
+  }
+
+
+  if(type === "votes"){
+  }
+
+
 }
 
 
@@ -36,6 +58,8 @@ const App = () => {
 
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(new Array())
+  const [mostVoted, setMostVoted] = useState(0)
+
   let copy = [...points]
   if(points.length < anecdotes.length) attachVotes() //Le damos tamaño al Array.
 
@@ -55,16 +79,25 @@ const App = () => {
   function voteUp(selected){
     copy[selected] = copy[selected] + 1
     setPoints(copy)
+
+    //GESTIONAR ESTO: hace falta controlar qué comentario tiene más votos y mostrarlo.
+
   }
 
   return(
     <div>
+      <h2>ANECDOTES OF THE DAY</h2>
       {anecdotes[selected]}
-      <Information selected={selected} points={points} />
-      <div style={{display: "flex"}}>
+      <Information type="votes" text1="This anecdote has " text2="votes" selected={selected} points={points} />
+      
+      <div>
       <Button text="vote" position={selected} onClick={() => voteUp(selected)} />
       <Button text="next anecdote" onClick={seleccionarFrase} />
       </div>
+      
+      <Information type="most" text={anecdotes[mostVoted]} />
+
+
     </div>
   )
 }
