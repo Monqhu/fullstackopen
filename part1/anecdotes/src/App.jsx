@@ -13,9 +13,6 @@ const Button = (props) => {
 const Information = (props) => {
   const {type, selected, points} = props
 
-  console.log(props)
-
-
   switch (type) {
     case "votes":
     return(
@@ -30,17 +27,8 @@ const Information = (props) => {
         <h2>Anecdote with most votes</h2>
         <p>{props.text}</p>
       </div>
-      
     )
-  
-    
   }
-
-
-  if(type === "votes"){
-  }
-
-
 }
 
 
@@ -58,27 +46,47 @@ const App = () => {
 
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(new Array())
-  const [mostVoted, setMostVoted] = useState(0)
+  const [mostVoted, setMostVoted] = useState(0) //Guardamos la posición del comentario con más votos. NO EL NÚMERO DE VOTOS.
 
   let copy = [...points]
   if(points.length < anecdotes.length) attachVotes() //Le damos tamaño al Array.
 
+
   const seleccionarFrase = () => {
     let number = Math.floor(Math.random() * anecdotes.length)
     setSelected(number)
-    // console.log(number) -> Para ver el número de frase que se selecciona.
   }
 
   function attachVotes() {
+    let mostVotedSelector = 0;
+    let mostVotedSentence = 0;
+
+    //Este bucle sirve para rellenar el array de con votos aleatorios, para hacerlo más dinámico.
     for(let i = 0; i < anecdotes.length; i++){
       copy[i] = Math.floor(Math.random() * 10) + 1
       setPoints(copy)
     }
+
+    //Este bucle sirve para encontrar el comentario con más votos y hacerle un "set", solo la primera vez.
+    copy.forEach((element, index) => {
+      if(element > mostVotedSelector){
+        mostVotedSelector = element //Controlamos el número máximo de votos
+        mostVotedSentence = index //Controlamos la frase con más votos
+      }
+    });
+    setMostVoted(mostVotedSentence)
   }
   
   function voteUp(selected){
+    console.log("frase número:", selected)
+    console.log("votos de la frase:", copy[selected])
     copy[selected] = copy[selected] + 1
     setPoints(copy)
+
+    
+    if(copy[selected] > points[mostVoted]){
+      setMostVoted(selected)
+    }
 
     //GESTIONAR ESTO: hace falta controlar qué comentario tiene más votos y mostrarlo.
 
