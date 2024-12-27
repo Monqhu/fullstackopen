@@ -1,8 +1,37 @@
 const Course = (props) => {
+  console.log(props.course);
+  
   return(
-    <div>
+    <>
+      <Header text={props.course.name} />
+    </>
+  )
+}
 
-    </div>
+const Header = (props) => {
+  const {text} = props
+  console.log(text)
+  return(
+    <h1>{text}</h1>
+  )
+}
+
+const Content = (props) => {
+  return(
+    <>
+    </>
+  )
+}
+
+const Part = (props) => {  
+  return(
+    <></>
+  )
+}
+
+const Total = (props) => {
+  return(
+    <></>
   )
 }
 
