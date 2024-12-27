@@ -47,8 +47,8 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(new Array())
   const [mostVoted, setMostVoted] = useState(0) //Guardamos la posición del comentario con más votos. NO EL NÚMERO DE VOTOS.
-
   let copy = [...points]
+
   if(points.length < anecdotes.length) attachVotes() //Le damos tamaño al Array.
 
 
@@ -82,14 +82,10 @@ const App = () => {
     console.log("votos de la frase:", copy[selected])
     copy[selected] = copy[selected] + 1
     setPoints(copy)
-
     
     if(copy[selected] > points[mostVoted]){
       setMostVoted(selected)
     }
-
-    //GESTIONAR ESTO: hace falta controlar qué comentario tiene más votos y mostrarlo.
-
   }
 
   return(
@@ -104,8 +100,6 @@ const App = () => {
       </div>
       
       <Information type="most" text={anecdotes[mostVoted]} />
-
-
     </div>
   )
 }
