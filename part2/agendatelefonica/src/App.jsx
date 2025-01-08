@@ -62,8 +62,11 @@ const App = () => {
 
       <form onSubmit={addContact}>
         <div>
-          <label htmlFor="1">Nombre: </label><Input id="1" type="text" placeholder="Introduzca un nombre" value={newName} onChange={handleClientChange} /> <br />
-          <label htmlFor="2">Teléfono: </label><Input id="2" type="text" placeholder="Introduzca el número de teléfono" value={newNumber} onChange={handleNumberChange} />
+          <label htmlFor="1">Nombre: </label>
+          <Input id="1" type="text" placeholder="Introduzca un nombre" value={newName} onChange={handleClientChange} /> <br />
+          
+          <label htmlFor="2">Teléfono: </label>
+          <Input id="2" type="text" placeholder="Introduzca el número de teléfono" value={newNumber} onChange={handleNumberChange} />
         </div>
         <div>
           <button type="submit">add</button>
