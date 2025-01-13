@@ -1,8 +1,14 @@
 const Client = (props) => {
-  const { name, number } = props.person
+  //Deconstruimos los objetos que nos interesen y el resto los almacenamos en 'rest'
+  const {person, ...rest} = props
+
   return(
-    <p><b>{name}, {number}</b></p>
+    <>
+      <b>{person.name} {person.number}</b>
+      <button onClick={rest.deletePerson}>Borrar contacto</button><br /><br />
+    </>
   )
 }
+//<b>{name}, {number}</b>
 
 export default Client

@@ -1,38 +1,63 @@
-import { useState } from 'react'
+//COMPONENTS
+import { useState, useEffect } from 'react'
 import Client from './components/Client'
 import Buscador from './components/Buscador'
 import Input from './components/Input'
 
-const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      number: '677996152'
-     },
-     {name: 'Ada Lovelace', 
-      number: '39-44-5323523'
-    },
-    {name: 'Dan Abramov',
-       number: '12-43-234345'
-    },
-  ])
+//BACKEND
+import personService from './services/persons'
 
+const App = () => {
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [buscador, setBuscador] = useState('')
   const [showAll, setShowAll] = useState(true)
   const clientsToShow = showAll ? persons : persons.filter(person => person.name.toLowerCase().includes(buscador.toLowerCase()) || person.number.includes(buscador))
 
+
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(response => {
+        setPersons(response)
+      })
+  }, [])
+
+
   const addContact = (event) => {
     event.preventDefault()
-    let check = checkIfNameExists(newName)
+    let check = checkIfNameExists(newName) //Comprobamos que el nombre no esté seleccionado con esta función
     
     if(!check){
-      let personsModified = persons.concat({name: newName, number: newNumber})
-      console.log(personsModified)
-      setPersons(personsModified)
-      console.log("has pulsado el botón de enviar")   
+      const newPerson = {
+        name: newName, 
+        number: newNumber
+      }
+
+      personService
+      .create(newPerson)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        console.log("esto es response.data:", response.data)
+      })
+
+
     }else{
-      alert(`${newName} ya está en la lista de contactos`)
+      //CAMBIAMOS EL NÚMERO, PERO RESPETAMOS EL NOMBRE
+
+      let check = window.confirm("Seguro que quieres cambiar el número de este contacto?")
+
+      if(check == true){
+        const changedPerson = {...persons.find(p => p.name == newName), number: newNumber} 
+        personService
+        .update(changedPerson.id, changedPerson)
+        .then(response => {
+          setPersons(persons.map(p => p.id !== changedPerson.id ? p : response))
+        })
+      }else{
+        alert('No se ha cambiado el número')
+      }
     }
   }
 
@@ -55,6 +80,27 @@ const App = () => {
     else setShowAll(false)
   }
 
+  const deletePersonId = ({id}) => {
+    let personsModified = persons.filter(p => p.id !== id)
+    let check = window.confirm("Seguro que quieres borrar este contacto?")
+
+    if(check == true){
+      try{
+        personService
+        .destroy(id)
+        .then(response => {
+          console.log("Información del backend antes de gestionarse: ", response)
+          setPersons(personsModified)
+        })
+      }catch(e){
+        alert("error, mira el console.log")
+        console.log('esto es un "catch" en la función "deletePerson"')
+      }
+    }else{
+      alert("Se ha abortado la operación")
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -75,7 +121,7 @@ const App = () => {
       
       <h2>Numbers</h2>
       {clientsToShow.map((person, index) => (
-          <Client key={index} person={person} />
+        <Client key={index} person={person} deletePerson={() => deletePersonId(person)} />
       ))} 
       <div>debug: {buscador}</div>
     </div>

@@ -1,0 +1,19 @@
+{
+  "persons": [
+    {
+      "id": "cef1",
+      "name": "TEST TESTINGTON",
+      "number": "pirate-666"
+    },
+    {
+      "id": "da23",
+      "name": "a bo'wa o wa'ah",
+      "number": "544"
+    },
+    {
+      "id": "92f4",
+      "name": "Arto Hellas",
+      "number": "544"
+    }
+  ]
+}
