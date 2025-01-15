@@ -3,9 +3,13 @@ import { useState, useEffect } from 'react'
 import Client from './components/Client'
 import Buscador from './components/Buscador'
 import Input from './components/Input'
+import Notification from './components/Notification'
 
 //BACKEND
 import personService from './services/persons'
+
+//OTROS RECURSOS
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -13,6 +17,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [buscador, setBuscador] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [notificationMessage, setNotificationMessage] = useState('No hay nada que comentar..')
+  const [notificationType, setNotificationType] = useState('success')
   const clientsToShow = showAll ? persons : persons.filter(person => person.name.toLowerCase().includes(buscador.toLowerCase()) || person.number.includes(buscador))
 
 
@@ -38,12 +44,13 @@ const App = () => {
       personService
       .create(newPerson)
       .then(response => {
+        setNotificationMessage(`${response.data.name} added to the phonebook`)
+        setNotificationType('success')
+        setTimeout(() => {setNotificationMessage(null)}, 5000);
         setPersons(persons.concat(response.data))
-        console.log("esto es response.data:", response.data)
       })
-
-
-    }else{
+    }
+    else{
       //CAMBIAMOS EL NÚMERO, PERO RESPETAMOS EL NOMBRE
 
       let check = window.confirm("Seguro que quieres cambiar el número de este contacto?")
@@ -53,7 +60,15 @@ const App = () => {
         personService
         .update(changedPerson.id, changedPerson)
         .then(response => {
+          setNotificationMessage(`${response.name} old number changed to ${newNumber}`)
+          setNotificationType('success')
+          setTimeout(() => {setNotificationMessage(null)}, 5000);
           setPersons(persons.map(p => p.id !== changedPerson.id ? p : response))
+        })
+        .catch(error => {
+          setNotificationMessage(`No hay datos de ${newName} en nuestros servidores.`)
+          setNotificationType('fail')
+          setTimeout(() => {setNotificationMessage(null)}, 10000);
         })
       }else{
         alert('No se ha cambiado el número')
@@ -104,10 +119,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} type={notificationType} />
       Buscador: <Buscador type="text" placeholder='Nombre o teléfono' onChange={(event) => handleBuscadorChange(event.target.value)} /> <br /><br />
 
       <form onSubmit={addContact}>
         <div>
+          <h3>Nuevo contacto</h3>
           <label htmlFor="1">Nombre: </label>
           <Input id="1" type="text" placeholder="Introduzca un nombre" value={newName} onChange={handleClientChange} /> <br />
           
