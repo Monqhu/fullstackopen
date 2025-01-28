@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 app.use(express.json())//Convierte los datos del objeto 'request' a javascript y los inserta en el body, para que se puedan leer dentro de un controlador
+app.use(cors())//Middleware que permite que el servidor acepte solicitudes de cualquier origen
 
 
 let notes = [
@@ -97,7 +99,7 @@ const generateId = () => {
 
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
