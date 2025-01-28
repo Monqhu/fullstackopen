@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 app.use(express.json())//Convierte los datos del objeto 'request' a javascript y los inserta en el body, para que se puedan leer dentro de un controlador
 app.use(cors())//Middleware que permite que el servidor acepte solicitudes de cualquier origen
+app.use(express.static('dist'))//Middleware que permite al backend cargar archivos estáticos (HTML, CSS, JS), en este caso el contenido de la carpeta dist
 
 
 let notes = [
@@ -33,7 +34,7 @@ const requestLogger = (request, response, next) => {
 }
 app.use(requestLogger)//Middleware que muestra en console el método, la ruta y el body de la petición
 
-
+//RUTAS (ENDPOINTS)
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
